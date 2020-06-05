@@ -4,7 +4,7 @@ import { InvalidParamError, MissingParamError } from '../../erros/index'
 
 export class SignUpController implements Controller {
   private readonly emailValidator: EmailValidator
-  private readonly addAccount: AddAccount
+  addAccount: AddAccount
 
   constructor (emailValidator: EmailValidator, addAccount: AddAccount) {
     this.emailValidator = emailValidator
