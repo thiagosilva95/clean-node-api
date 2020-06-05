@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --passWithNoTests --watch",
+    "clean:jest": "jest --clearCache",
     "test:staged": "jest --passWithNoTests"
   },
   "keywords": [],
