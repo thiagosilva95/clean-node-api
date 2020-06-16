@@ -1,7 +1,7 @@
 import { DbAddAccount } from './db-add-account'
 import { Hasher, AccountModel, AddAccountModel, AddAccountRepository } from './db-add-account-protocols'
 
-const makeEncrypter = (): Hasher => {
+const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
     async hash (value: string): Promise<string> {
       return new Promise(resolve => resolve('hashed_password'))
@@ -39,7 +39,7 @@ interface SutTypes {
 }
 
 const makeSut = (): SutTypes => {
-  const hasherStub = makeEncrypter()
+  const hasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
   const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub)
   return {
@@ -57,7 +57,7 @@ describe('DbAddAccount Usecase', () => {
     expect(hashSpy).toHaveBeenCalledWith('valid_password')
   })
 
-  test('Should throw if encrypter throws', async () => {
+  test('Should throw if Hasher throws', async () => {
     const { sut, hasherStub } = makeSut()
     jest.spyOn(hasherStub, 'hash').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.add(makeFakeAccountData())
