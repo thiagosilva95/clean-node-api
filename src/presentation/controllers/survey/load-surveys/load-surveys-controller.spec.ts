@@ -25,6 +25,7 @@ const makeFakeSurveys = (): SurveyModel[] => {
     }
   ]
 }
+
 const makeLoadSurveysStub = (): LoadSurveys => {
   class LoadSurveysStub implements LoadSurveys {
     async load (): Promise<SurveyModel[]> {
