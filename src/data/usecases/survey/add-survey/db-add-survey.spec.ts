@@ -1,5 +1,5 @@
 import { DbAddSurvey } from './db-add-survey'
-import { } from '@/domain/usecases/add-survey'
+import { } from '@/domain/usecases/survey/add-survey'
 import { AddSurveyRepository, AddSurveyModel } from './db-add-survey-protocols'
 import MockDate from 'mockdate'
 
