@@ -3,6 +3,7 @@ import { AddSurveyController } from './add-survey-controller'
 import { Validation } from '../../../protocols'
 import { badRequest, serverError, noContent } from '../../../helpers/http/http-helper'
 import MockDate from 'mockdate'
+import { throwError } from '@/domain/test/index'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -84,7 +85,7 @@ describe('Add Survey Controller', () => {
 
   test('Should return 500 if AddSurvey throws', async () => {
     const { sut, addSurveyStub } = makeSut()
-    jest.spyOn(addSurveyStub, 'add').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    jest.spyOn(addSurveyStub, 'add').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
   })
