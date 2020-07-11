@@ -3,7 +3,7 @@ import { MissingParamError, ServerError, EmailInUseError } from '../../../errors
 import { AccountModel, AddAccount, AddAccountParams, Validation, Authentication, AuthenticationParams } from './signup-controller-protocols'
 import { HttpRequest } from '../../../protocols'
 import { ok, serverError, badRequest, forbidden } from '../../../helpers/http/http-helper'
-import { throwError } from '@/domain/test/index'
+import { throwError, mockAccountModel } from '@/domain/test/index'
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
@@ -17,7 +17,7 @@ const makeAuthentication = (): Authentication => {
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
     async add (account: AddAccountParams): Promise<AccountModel> {
-      const fakeAccount: AccountModel = makeFakeAccount()
+      const fakeAccount: AccountModel = mockAccountModel()
       return new Promise(resolve => resolve(fakeAccount))
     }
   }
@@ -32,13 +32,6 @@ const makeValidation = (): Validation => {
   }
   return new ValidationStub()
 }
-
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_mail@mail.com',
-  password: 'valid_password'
-})
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {

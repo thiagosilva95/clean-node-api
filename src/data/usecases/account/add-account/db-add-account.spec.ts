@@ -1,32 +1,15 @@
 import { DbAddAccount } from './db-add-account'
-import { Hasher, AccountModel, AddAccountParams, AddAccountRepository, LoadAccountByEmailRepository } from './db-add-account-protocols'
+import { Hasher, AccountModel, AddAccountRepository, LoadAccountByEmailRepository } from './db-add-account-protocols'
 import { mockAccountModel, mockAddAccountParams, throwError } from '@/domain/test/index'
+import { mockHasher, mockAddAccountRepository } from '@/data/test/index'
 
-const makeHasher = (): Hasher => {
-  class HasherStub implements Hasher {
-    async hash (value: string): Promise<string> {
-      return new Promise(resolve => resolve('hashed_password'))
-    }
-  }
-  return new HasherStub()
-}
-
-const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
+const mockLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
     async loadByEmail (email: string): Promise<AccountModel> {
       return new Promise(resolve => resolve(null))
     }
   }
   return new LoadAccountByEmailRepositoryStub()
-}
-
-const makeAddAccountRepository = (): AddAccountRepository => {
-  class AddAccountRepositoryStub implements AddAccountRepository {
-    async add (accountData: AddAccountParams): Promise<AccountModel> {
-      return new Promise(resolve => resolve(mockAccountModel()))
-    }
-  }
-  return new AddAccountRepositoryStub()
 }
 
 type SutTypes = {
@@ -37,9 +20,9 @@ type SutTypes = {
 }
 
 const makeSut = (): SutTypes => {
-  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepository()
-  const hasherStub = makeHasher()
-  const addAccountRepositoryStub = makeAddAccountRepository()
+  const loadAccountByEmailRepositoryStub = mockLoadAccountByEmailRepository()
+  const hasherStub = mockHasher()
+  const addAccountRepositoryStub = mockAddAccountRepository()
   const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub, loadAccountByEmailRepositoryStub)
   return {
     sut,
@@ -70,7 +53,7 @@ describe('DbAddAccount Usecase', () => {
     await sut.add(mockAddAccountParams())
     expect(addSpy).toHaveBeenCalledWith({
       name: 'any_name',
-      email: 'any_email',
+      email: 'any_mail@mail.com',
       password: 'hashed_password'
     })
   })
