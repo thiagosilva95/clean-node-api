@@ -3,11 +3,12 @@ import { LoadAccountByToken } from '@/domain/usecases/account/load-account-by-to
 import { AccountModel } from '@/domain/models/account'
 import { mockAccountModel } from '@/domain/test/index'
 import { Authentication, AuthenticationParams } from '@/presentation/controllers/login/login/login-controller-protocols'
+import { AuthenticationModel } from '@/domain/models/authentication'
 
 export const mockAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (authentication: AuthenticationParams): Promise<string> {
-      return Promise.resolve('any_token')
+    async auth (authentication: AuthenticationParams): Promise<AuthenticationModel> {
+      return Promise.resolve({ accessToken: 'any_token', name: 'any_name' })
     }
   }
   return new AuthenticationStub()
